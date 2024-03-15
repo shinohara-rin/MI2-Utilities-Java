@@ -651,14 +651,18 @@ public class RendererExt{
     }
 
     public static void drawTurretZone(BaseTurret.BaseTurretBuild btb){
+        
+        // Log.info("Drawing TZ: "+btb.block.name);
         float z = Draw.z();
         float range = btb.range();
 
-        Draw.color(btb.team.color);
+        // Draw.color(btb.team.color);
+        Draw.color(ColorPalette.getColorForTurretName(btb.block.name));
         Draw.z(TurretZoneDrawer.getLayer(btb.team.id));
-        Draw.alpha(0.05f);
+        Draw.alpha(0.3f);
         Fill.poly(btb.x, btb.y, (int)(range) / 4, range);
 
+        Draw.color(btb.team.color);
         Lines.stroke(2f);
         Draw.alpha(animatedshields ? 1f : 0.5f);
         Lines.circle(btb.x, btb.y, range);
