@@ -163,7 +163,7 @@ public class RendererExt{
                     boolean transport = drawBlackboxBuilding(tile.build);
                     if(drevealInventory && !transport) drawItemStack(tile.build);
                 }
-                if(enTurretZone && tile.build instanceof BaseTurret.BaseTurretBuild btb) drawTurretZone(btb);
+                if(enTurretZone && tile.build instanceof BaseTurret.BaseTurretBuild btb) drawTurretZone(btb,tile);
                 if(enOverdriveZone && tile.build instanceof OverdriveProjector.OverdriveBuild odb) drawOverDriver(odb);
                 if(enMenderZone && tile.build instanceof MendProjector.MendBuild mb) drawMender(mb);
                 if(enMenderZone && tile.build instanceof RegenProjector.RegenProjectorBuild rb) drawRegen(rb);
@@ -650,14 +650,24 @@ public class RendererExt{
         Lines.rect(rb.x - block.range * tilesize / 2f, rb.y - block.range * tilesize / 2f, block.range * tilesize, block.range * tilesize);
     }
 
-    public static void drawTurretZone(BaseTurret.BaseTurretBuild btb){
+    public static void drawTurretZone(BaseTurret.BaseTurretBuild btb,Tile tile){
         
         // Log.info("Drawing TZ: "+btb.block.name);
         float z = Draw.z();
         float range = btb.range();
 
         // Draw.color(btb.team.color);
-        Draw.color(ColorPalette.getColorForTurretName(btb.block.name));
+        Color fillColor = Color.white;
+        if(tile.block() instanceof Turret t) {
+            if(t.targetAir && t.targetGround){
+                fillColor = Color.red;
+            } else if(t.targetAir){
+                fillColor = Color.blue;
+            } else if(t.targetGround){
+                fillColor = Color.green;
+            }
+        }
+        Draw.color(fillColor);
         Draw.z(TurretZoneDrawer.getLayer(btb.team.id));
         Draw.alpha(0.3f);
         Fill.poly(btb.x, btb.y, (int)(range) / 4, range);
